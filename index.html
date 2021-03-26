@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>Example 3x3 Cube</title>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
+    <script src="./jquery.cube.threejs.js"></script>
+    <script src="./OrbitControls.js"></script>
+
+    <style>
+      body {
+        background-color: black;
+        display: flex;
+        justify-content: center;
+      }
+
+        /* display: flex; */
+        /* justify-content: center; */
+        /* align-content: center; */
+
+      .cube {
+        width: 500px;
+        height: 500px;
+      }
+
+
+    </style>
+  </head>
+
+  <body>
+    <div id="contianer">
+      <div class="cube" id="cube"></div>
+      <div>
+        <button id="play">Play</button>
+        <button id="pause">Pause</button>
+        <button id="reset">Reset</button>
+        <label for="moves">Moves: </label>
+        <input type="text" id="moves" />
+        <button id="submit">Submit</button>
+        <input type="range" />
+      </div>
+    </div>
+    <script>
+      $(function () {
+        let cube = $(".cube").cube({
+          type: 3,
+        });
+        console.dir($(".cube"));
+        console.dir(cube);
+      });
+    </script>
+  </body>
+</html>

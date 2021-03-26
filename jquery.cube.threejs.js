@@ -18,12 +18,13 @@
  * along with the jquery.cube.threejs.js plugin. If not, see http://www.gnu.org/licenses/.
  */
 
-$.fn.cube = function(options) {
+$.fn.cube = function (options) {
 
+    // import { OrbitControls } from './OrbitControls';
     var _ref = this;
     var _renderer = null;
     var _scene = null;
-    var _camera = null;
+    _camera = null;
     var _cube = [];
     var _pivot = null;
 
@@ -32,8 +33,8 @@ $.fn.cube = function(options) {
         type: 3,
         camera: {
             x: 50,
-            y: 100,
-            z: 50
+            y: 50,
+            z: 100
         },
         size: {
             width: 60,
@@ -42,9 +43,9 @@ $.fn.cube = function(options) {
         color: [
             0xff0000, //right
             0xff8000, //left
-            0xffff00, //top
+            0xEEEE2E, //top
             0xffffff, //bottom
-            0x0000ff, //front
+            0x154FD7, //front
             0x00ff00, //back
             0x000000 //cube color
         ],
@@ -59,7 +60,7 @@ $.fn.cube = function(options) {
 
     //method for resetting the cube back to its default state
 
-    _ref.reset = function() {
+    _ref.reset = function () {
 
         //remove all children from the scene
 
@@ -75,7 +76,7 @@ $.fn.cube = function(options) {
 
 
     //method for executing a single move/turn
-    _ref.turn = function(move) {
+    _ref.turn = function (move) {
 
         options.onTurn(_ref, move);
 
@@ -575,7 +576,7 @@ $.fn.cube = function(options) {
         }
 
         //add children to pivot point
-        $(cubits).each(function() {
+        $(cubits).each(function () {
             _pivot.add(this);
         })
 
@@ -584,11 +585,11 @@ $.fn.cube = function(options) {
             rotation: _pivot.rotation[property] + (rotation * radian)
         }, {
             easing: "swing",
-            step: function(now) {
+            step: function (now) {
                 _pivot.rotation[property] = now;
             },
             duration: options.animation.delay,
-            complete: function() {
+            complete: function () {
                 orientCubits(cubits);
 
                 _ref.trigger("next-move");
@@ -598,7 +599,7 @@ $.fn.cube = function(options) {
     }
 
     //method for executing a set of moves
-    _ref.execute = function(moves) {
+    _ref.execute = function (moves) {
 
         //parse moves from notation into individual moves
         moves = parse(moves);
@@ -632,7 +633,7 @@ $.fn.cube = function(options) {
     }
 
     //handle next move trigger
-    _ref.on("next-move", function(e) {
+    _ref.on("next-move", function (e) {
 
         var moves = _ref.data("move-stack");
         if (!moves)
@@ -773,7 +774,7 @@ $.fn.cube = function(options) {
         //create new texture
         var texture = new THREE.Texture(image);
         texture.anisotropy = 4;
-        image.onload = function() {
+        image.onload = function () {
             texture.needsUpdate = true;
         }
 
@@ -872,12 +873,7 @@ $.fn.cube = function(options) {
     }
 
     //method for handling rendering
-    function render() {
 
-        requestAnimationFrame(render);
-        _renderer.render(_scene, _camera);
-        _camera.lookAt(_pivot.position);
-    }
 
     //method for retrieving cubits by layer
     //specifying plane x, y, z
@@ -1007,7 +1003,7 @@ $.fn.cube = function(options) {
         var FACE_BACK = 5;
 
         //paint faces
-        $(cubits).each(function() {
+        $(cubits).each(function () {
             var cubit = this;
             var materials = cubit.material;
 
@@ -1111,15 +1107,85 @@ $.fn.cube = function(options) {
         //set plugin
         _ref.data("_cube", _ref);
 
-        //render
-        render();
+        // controls.addEventListener( 'change', render ); // call this only in static scenes (i.e., if there is no animation loop)
+        let controls = new THREE.OrbitControls(_camera, _renderer.domElement);
+        // controls.listenToKeyEvents(window); // optional
 
+        controls.enableDamping = true; // an animation loop is required when either damping or auto-rotation are enabled
+        controls.dampingFactor = 0.05;
+
+        controls.screenSpacePanning = false;
+
+        controls.minDistance = 100;
+        controls.maxDistance = 500;
+
+        controls.rotateSpeed = 1.5;
+
+        // controls.maxPolarAngle = Math.PI / 2;
+        // controls.autoRotate = treue;
+
+        function render() {
+            requestAnimationFrame(render);
+            controls.update();
+            _renderer.render(_scene, _camera);
+            _camera.lookAt(_pivot.position);
+        }
+        render();
         document.getElementById("play").addEventListener("click", playy);
 
 
         function playy() {
-            _ref.execute("U D B L R");
+            let moves = document.getElementById("moves").value;
+            _ref.execute(moves);
+            console.log(_camera.position);
         }
+
+
+
+        document.getElementById("submit").addEventListener("click", () => {
+            let moves = document.getElementById("moves").value;
+            // _ref.execute(moves);
+            // await new Promise(r => setTimeout(r, 5000));
+            // console.dir(moves);
+
+            function sleep(ms) {
+                return new Promise(resolve => setTimeout(resolve, ms));
+            }
+            const userAction = async () => {
+                // await sleep(2000);
+                request = {
+                    moves: moves
+                }
+                // const response = await fetch('http://127.0.0.1:5000/move/' + JSON.stringify(request));
+                const response = await fetch('http://127.0.0.1:5000/move', {
+                    method: 'POST',
+                    headers: {
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify(request)
+                });
+                console.log(response);
+                const data = await response.json(); //extract JSON from the http response
+                console.log(data);
+                // console.log(data["moves"]);
+                _ref.execute(data.join(" "));
+                // do something with myJson
+            }
+
+            userAction();
+            // _ref.execute("U D B L R");
+        });
+
+        // $(".cube").on('resize', onWindowResize);
+        // function onWindowResize() {
+
+        //     camera.aspect = window.innerWidth / window.innerHeight;
+        //     camera.updateProjectionMatrix();
+
+        //     renderer.setSize(window.innerWidth, window.innerHeight);
+
+        // }
 
     }
 
@@ -1127,6 +1193,8 @@ $.fn.cube = function(options) {
 
 
     constructor();
+
+
 
     return _ref;
 }
