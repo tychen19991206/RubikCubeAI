@@ -1,53 +1,59 @@
 <!DOCTYPE html>
 <html>
-  <head>
+
+<head>
     <title>Example 3x3 Cube</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-beta1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/110/three.min.js"></script>
     <script src="./jquery.cube.threejs.js"></script>
     <script src="./OrbitControls.js"></script>
 
-    <style>
-      body {
-        background-color: black;
-        display: flex;
-        justify-content: center;
-      }
 
+    <style>
+        body {
+            background-color: black;
+            display: flex;
+            justify-content: center;
+        }
         /* display: flex; */
         /* justify-content: center; */
         /* align-content: center; */
-
-      .cube {
-        width: 500px;
-        height: 500px;
-      }
-
-
+        
+        .cube {
+            width: 500px;
+            height: 500px;
+        }
     </style>
-  </head>
+</head>
 
-  <body>
+<body>
     <div id="contianer">
-      <div class="cube" id="cube"></div>
-      <div>
-        <button id="play">Play</button>
-        <button id="pause">Pause</button>
-        <button id="reset">Reset</button>
-        <label for="moves">Moves: </label>
-        <input type="text" id="moves" />
-        <button id="submit">Submit</button>
-        <input type="range" />
-      </div>
+        <div class="cube" id="cube"></div>
+        <div>
+            <button id="play">Play</button>
+            <button id="pause">Pause</button>
+            <button id="reset">Reset</button>
+            <label for="moves">Moves: </label>
+            <input type="text" id="moves" />
+            <button id="submit">Submit</button>
+            <div id="slider">
+                <input class="bar" type="range" id="range-input" min="200" max="2000" value="500" />
+                <span class="highlight"></span>
+                <output id="range-value">1</output>
+            </div>
+            <button id="btn" type="submit">Submit</button>
+
+        </div>
     </div>
     <script>
-      $(function () {
-        let cube = $(".cube").cube({
-          type: 3,
+        $(function() {
+            let cube = $(".cube").cube({
+                type: 3,
+            });
+            console.dir($(".cube"));
+            console.dir(cube);
         });
-        console.dir($(".cube"));
-        console.dir(cube);
-      });
     </script>
-  </body>
+</body>
+
 </html>

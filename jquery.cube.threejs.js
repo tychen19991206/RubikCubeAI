@@ -18,7 +18,7 @@
  * along with the jquery.cube.threejs.js plugin. If not, see http://www.gnu.org/licenses/.
  */
 
-$.fn.cube = function (options) {
+$.fn.cube = function(options) {
 
     // import { OrbitControls } from './OrbitControls';
     var _ref = this;
@@ -51,16 +51,37 @@ $.fn.cube = function (options) {
         ],
         background: 0x1D1F20,
         animation: {
-            delay: 500
+            // delay: 1000
         },
         onTurn: $.noop,
 
         onComplete: $.noop
     }, options);
+    (function() {
+        var rangeInput = document.getElementById("range-input")
+        var rangeValue = document.getElementById("range-value")
+        var button = document.getElementById("btn")
 
+
+        button.onclick = testTest
+
+        function testTest() {
+            let value = rangeInput.value
+            options.animation.delay = parseInt(value);
+            return true
+        }
+
+        // Print the range value to the output
+        rangeInput.oninput = rangeOutput
+
+        function rangeOutput() {
+            rangeValue.innerText = rangeInput.value
+        }
+
+    })()
     //method for resetting the cube back to its default state
 
-    _ref.reset = function () {
+    _ref.reset = function() {
 
         //remove all children from the scene
 
@@ -76,7 +97,7 @@ $.fn.cube = function (options) {
 
 
     //method for executing a single move/turn
-    _ref.turn = function (move) {
+    _ref.turn = function(move) {
 
         options.onTurn(_ref, move);
 
@@ -569,14 +590,13 @@ $.fn.cube = function (options) {
                 rotation = 90;
                 break;
 
-            case "P":
-                break;
+
             default:
                 return;
         }
 
         //add children to pivot point
-        $(cubits).each(function () {
+        $(cubits).each(function() {
             _pivot.add(this);
         })
 
@@ -585,11 +605,11 @@ $.fn.cube = function (options) {
             rotation: _pivot.rotation[property] + (rotation * radian)
         }, {
             easing: "swing",
-            step: function (now) {
+            step: function(now) {
                 _pivot.rotation[property] = now;
             },
             duration: options.animation.delay,
-            complete: function () {
+            complete: function() {
                 orientCubits(cubits);
 
                 _ref.trigger("next-move");
@@ -599,7 +619,7 @@ $.fn.cube = function (options) {
     }
 
     //method for executing a set of moves
-    _ref.execute = function (moves) {
+    _ref.execute = function(moves) {
 
         //parse moves from notation into individual moves
         moves = parse(moves);
@@ -623,17 +643,20 @@ $.fn.cube = function (options) {
 
         if (!ms)
             _ref.trigger("next-move");
+
+
         document.getElementById("pause").addEventListener("click", pausee);
 
+
+
         function pausee() {
-            // for (i = 0; i < 3; i++)
-            moves.splice(0, 0, '');
+            // moves.splice(0, 0, '');
         }
 
     }
 
     //handle next move trigger
-    _ref.on("next-move", function (e) {
+    _ref.on("next-move", function(e) {
 
         var moves = _ref.data("move-stack");
         if (!moves)
@@ -774,7 +797,7 @@ $.fn.cube = function (options) {
         //create new texture
         var texture = new THREE.Texture(image);
         texture.anisotropy = 4;
-        image.onload = function () {
+        image.onload = function() {
             texture.needsUpdate = true;
         }
 
@@ -1003,7 +1026,7 @@ $.fn.cube = function (options) {
         var FACE_BACK = 5;
 
         //paint faces
-        $(cubits).each(function () {
+        $(cubits).each(function() {
             var cubit = this;
             var materials = cubit.material;
 
@@ -1137,6 +1160,7 @@ $.fn.cube = function (options) {
         function playy() {
             let moves = document.getElementById("moves").value;
             _ref.execute(moves);
+
             console.log(_camera.position);
         }
 
@@ -1151,12 +1175,12 @@ $.fn.cube = function (options) {
             function sleep(ms) {
                 return new Promise(resolve => setTimeout(resolve, ms));
             }
-            const userAction = async () => {
+            const userAction = async() => {
                 // await sleep(2000);
                 request = {
-                    moves: moves
-                }
-                // const response = await fetch('http://127.0.0.1:5000/move/' + JSON.stringify(request));
+                        moves: moves
+                    }
+                    // const response = await fetch('http://127.0.0.1:5000/move/' + JSON.stringify(request));
                 const response = await fetch('http://127.0.0.1:5000/move', {
                     method: 'POST',
                     headers: {
