@@ -647,12 +647,15 @@ $.fn.cube = function(options) {
 
         document.getElementById("pause").addEventListener("click", pausee);
 
-
-
         function pausee() {
-            // moves.splice(0, 0, '');
+            moves.unshift(" ");
         }
+        document.getElementById("resume").addEventListener("click", resume);
 
+        function resume() {
+            moves.shift();
+            _ref.trigger("next-move");
+        }
     }
 
     //handle next move trigger
