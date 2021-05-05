@@ -48,6 +48,14 @@ $.fn.cube = function(options) {
             0x154FD7, //front
             0x00ff00, //back
             0x000000 //cube color
+
+            // 0xff0000, //right
+            // 0x808080, //left
+            // 0x808080, //top
+            // 0x808080, //bottom
+            // 0x808080, //front
+            // 0x808080, //back
+            // 0x808080 //cube color
         ],
         background: 0x1D1F20,
         animation: {
@@ -823,7 +831,7 @@ $.fn.cube = function(options) {
 
             var m = new THREE.MeshBasicMaterial({
                 map: texture,
-                //overdraw: 1
+                // overdraw: 5
             });
 
             materials.push(m);

@@ -11,7 +11,10 @@
 
     <style>
         body {
-            background-color: black;
+            background-image: url('1.jpg');
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            background-size: cover;
             display: flex;
             justify-content: center;
         }
@@ -23,6 +26,39 @@
             width: 500px;
             height: 500px;
         }
+        
+        .button {
+            background-color: #7f4caf;
+            /* Green */
+            border: none;
+            color: white;
+            padding: 8px 15px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 6px;
+            margin: 4px 2px;
+            cursor: pointer;
+            -webkit-transition-duration: 0.4s;
+            /* Safari */
+            transition-duration: 0.4s;
+        }
+        
+        .button1 {
+            background-color: white;
+            color: black;
+            border: 2px solid #4c8baf;
+        }
+        
+        .button1:hover {
+            background-color: #534caf;
+            color: white;
+        }
+        
+        .disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+        }
     </style>
 </head>
 
@@ -30,19 +66,22 @@
     <div id="contianer">
         <div class="cube" id="cube"></div>
         <div>
-            <button id="play">Play</button>
-            <button id="resume">Resume</button>
-            <button id="pause">Pause</button>
-            <button id="reset">Reset</button>
+            <button class="button button1" id="play">Play</button>
+            <button class="button button1" id="resume">Resume</button>
+            <button class="button button1" id="pause">Pause</button>
+            <button class="button button1" id="reset">Reset</button>
+
+
             <label for="moves">Moves: </label>
             <input type="text" id="moves" />
-            <button id="submit">Submit</button>
+            <button class="button disabled" id="submit">Submit</button>
             <div id="slider">
+                <label for="speed">Speed: </label>
                 <input class="bar" type="range" id="range-input" min="200" max="2000" value="500" />
                 <span class="highlight"></span>
-                <output id="range-value">1</output>
+                <output id="range-value"></output>
+                <button class="button" id="btn" type="submit">Submit</button>
             </div>
-            <button id="btn" type="submit">Submit</button>
 
         </div>
     </div>
